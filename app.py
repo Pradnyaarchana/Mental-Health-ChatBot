@@ -12,7 +12,7 @@ def initialize_llm():
     llm = ChatGroq(
         temperature=0,
         groq_api_key=os.getenv("GROQ_API_KEY"),  # Use Hugging Face Secret
-        model_name="llama3-70b-8192"
+        model_name="llama3-8b-8192"
     )
     return llm
 
