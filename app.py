@@ -67,6 +67,7 @@ def chatbot_response(user_input):
 with gr.Blocks(theme="Respair/Shiki@1.2.1") as app:
     gr.ChatInterface(fn=chatbot_response, title="Mental Health ChatBot")
 
-port = int(os.getenv("PORT", 7860))
-app.launch(server_name="0.0.0.0", server_port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 7860))  # Required by Render
+    app.launch(server_name="0.0.0.0", server_port=port)
 
