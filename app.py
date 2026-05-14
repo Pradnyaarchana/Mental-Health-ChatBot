@@ -1,11 +1,11 @@
 import os
 from langchain_groq import ChatGroq
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.document_loaders import DirectoryLoader, PyPDFLoader
-from langchain.vectorstores import Chroma
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
+from langchain_community.vectorstores import Chroma
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_classic.chains import RetrievalQA
+from langchain_classic.prompts import PromptTemplate
 import gradio as gr
 
 def initialize_llm():
@@ -49,14 +49,20 @@ Chatbot:"""
 
 print("Initializing Chatbot...")
 llm = initialize_llm()
-db_path = "./chroma_db"
+print("Loading embeddings...")
 
-if not os.path.exists(db_path):
-    vector_db = create_vector_db()
-else:
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vector_db = Chroma(persist_directory=db_path, embedding_function=embeddings)
+create_vector_db()
 
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+print("Loading ChromaDB...")
+
+vector_db = Chroma(
+    persist_directory="./chroma_db",
+    embedding_function=embeddings
+)
 qa_chain = setup_qa_chain(vector_db, llm)
 
 def chatbot_response(user_input):
